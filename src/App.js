@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
-import Home from './components/Home.jsx';
-import News from './components/News.jsx';
-import User from './components/User.jsx';
-
-import Not404 from './components/Not404.jsx';
+import router from './router/index.jsx'
 import {BrowserRouter,Route,NavLink,Switch,HashRouter} from 'react-router-dom';
 import './static/css/index.css'
   /*
-    HashRouter
-    BrowserRouter
+    HashRouter 或 BrowserRouter :路由基本
+    Route : 控制路由显示对应的组件
     exact:精准匹配
+    Switch:用来包裹Route，它里面不能放其他html元素，用来只显示一个路由
   */
 export default class App extends Component {
   state={
@@ -24,7 +21,7 @@ export default class App extends Component {
         to:'/user',
         con:'用户中心'
       },{
-        to:'/new',
+        to:'/news',
         con:'新闻页面'
       }
     ]
@@ -34,7 +31,7 @@ export default class App extends Component {
     this.getData();
   }
   render() {
-    
+
     return (
       <BrowserRouter>
         <div className="header">
@@ -42,7 +39,6 @@ export default class App extends Component {
           <NavLink to='/new' activeClassName='hover'>新闻页面</NavLink>
           <NavLink to='/user' activeClassName='hover'>用户中心</NavLink> */}
           {
-            // console.log("this",this.state.arr)
             this.state.arr.length > 0 && (
               this.state.arr.map((item,index)=>{
                 return (
@@ -55,10 +51,36 @@ export default class App extends Component {
         </div>
         <hr/>
         <Switch>
-          <Route exact path='/' component={Home}></Route>
+          {/* <Route exact path='/' component={Home}></Route>
           <Route path='/new' component={News}></Route>
           <Route path='/user' component={User}></Route>
-          <Route component={Not404}></Route>
+          <Route component={Not404}></Route> */}
+
+          {
+            // console.log("rrrrrr",router)
+            router.map((item,index)=>{
+              // console.log("xxxxxxxx",index,item.path,item.component)
+              if(item.exact){
+                return (
+                  <Route exact={item.exact} key={index} path={item.path} component={item.component}></Route>
+                )
+              }else{
+                return (
+                  <Route key={index} path={item.path} 
+                    //路由嵌套父子组件传值
+                    render = {
+                      (props)=>{
+                        console.log("props",props)
+                        return <item.component data={item.children}></item.component>
+                      }
+                    }
+                  
+                  ></Route>
+                )
+              }
+              
+            })
+          }
         </Switch>
         
       </BrowserRouter>

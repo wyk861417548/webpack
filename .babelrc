@@ -1,5 +1,6 @@
 {
   "presets": [["@babel/preset-env",{"useBuiltIns":"usage"}],"@babel/react"],
   // "plugins": ["babel-plugin-transform-runtime"]
+  //用来编译类的
   "plugins":["@babel/plugin-proposal-class-properties"]
 }
